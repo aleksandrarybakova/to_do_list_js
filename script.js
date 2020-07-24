@@ -4,6 +4,11 @@ let toDoList = [];
 let toDoUl = document.querySelector('.todo');
 let newTodo = {};
 
+if (localStorage.getItem('todo')){
+    toDoList = JSON.parse(localStorage.getItem('todo'));
+    displayMessages();
+}
+
 addButton.addEventListener('click', function(){
     newTodo = {
         todo: addMessage.value,
@@ -13,7 +18,7 @@ addButton.addEventListener('click', function(){
 
     toDoList.push(newTodo);
     displayMessages();
-    return newTodo;        
+    localStorage.setItem('todo', JSON.stringify(toDoList));      
 });
 
 function displayMessages(){
@@ -28,3 +33,16 @@ function displayMessages(){
         
     })
 }
+
+toDoUl.addEventListener('change', function(event){
+    let idInput = event.target.getAttribute('id');
+    let forLabel = toDoUl.querySelector('[for='+ idInput +']');
+    let valueLabel = forLabel.innerHTML;
+    toDoList.forEach(function (item){
+        if(item.todo === valueLabel){
+            item.cheked =!item.cheked;
+            localStorage.setItem('todo', JSON.stringify(toDoList)); 
+        }
+    })
+}) 
+
